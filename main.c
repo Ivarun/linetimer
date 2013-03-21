@@ -99,7 +99,8 @@ DESCRIPTION\n\
 \t\t\t'l[ocal]' use local time\n\
 \t\t\t'u[tc]' use UTC\n\
 \t\tThe output format is hardcoded to the only sane format in\n\
-\t\texistence.\n\
+\t\texistence (ISO 8601). This option is incompatible with and\n\
+\t\tdisables the accumulate and exp-mode options.\n\
 \n\
 \t-e, --exp-mode\n\
 \t\tPrint times using exponential mode with lowercase 'e'.\n\
