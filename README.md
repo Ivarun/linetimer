@@ -29,3 +29,49 @@ To ensure decent timing results it may be necessary to set the buffering mode fo
 
 Whether or not this is necessary for good results depends on your system. stdout is usually line buffered when connected to a tty, but when it is being piped to linetimer it may have more aggressive buffering behaviour. Since the test program never flushes stdout explicitly it can be used to test whether it is necessary to alter the buffering behaviour or not.
 
+Examples
+--------
+
+Running the accompanying test program (using stdbuf to disable buffering) should look something like this:
+
+    > stdbuf -o 0 ./test | linetimer
+    0.0080|A line first...
+    0.0000|
+    0.0000|
+    0.0010|1 ms: done
+    0.0011|1 ms: done
+    0.0011|1 ms: done
+    0.0011|1 ms: done
+    0.0011|1 ms: done
+    0.0000|
+    0.1001|100 ms: done
+    0.1001|100 ms: done
+    0.1001|100 ms: done
+    0.1001|100 ms: done
+    0.1001|100 ms: done
+    0.0000|
+    1.5001|1.5 s: done
+    1.5411|1.5 s (probably more because of printing). This line should wrap appropr
+          |iately: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          |xxxxxxxxxxxxxxxxxxxx
+    5.5553|5.555 s: done
+
+Or have you ever wondered how long it takes the du utility to find the size of each directory under /usr? I sure have!
+
+    > # My version of du seems to flush stdout appropriately, so there is no need to use stdbuf here.
+    > du -s /usr/* 2>/dev/null | linetimer
+    0.1432|174704  /usr/bin
+    0.0000|0       /usr/games
+    0.4419|22956   /usr/include
+    1.4700|208860  /usr/lib
+    1.1107|325428  /usr/lib64
+    0.0329|51016   /usr/local
+    0.0372|41860   /usr/sbin
+    5.9955|463948  /usr/share
+    0.0016|0       /usr/src
+    0.0000|4       /usr/tmp
+    0.0002|0       /usr/X11R6
+    0.0003|28      /usr/x86_64-suse-linux
